@@ -2,7 +2,7 @@
 
 # Author: Dat T Nguyen <n.dat@outlook.com>
 # Date: 15 Aug 2021
-
+# Dependency: vcftools, Plink 1.9
 # this script is used to select tagSNPs - used for TagIt algorithm
 # syntax bash this_script.sh your_file.vcf.gz tag_name
 # tag_name is typically is name of chromosome
@@ -34,7 +34,7 @@ plink --bfile ${base_name}_tem_file \
   --memory 2000
 
 # compute fre file
-/path/to/vcftools/src/cpp/vcftools --gzvcf $file --freq --out ${base_name}_frequency
+vcftools --gzvcf $file --freq --out ${base_name}_frequency
 # remove "chr"
 sed -i 's/chr//g' ${base_name}_frequency.frq
 
