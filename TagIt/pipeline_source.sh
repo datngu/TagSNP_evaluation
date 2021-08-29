@@ -8,7 +8,7 @@
 # tag_name is typically is name of chromosome
 # example: bash this_script.sh EUR_chr10.vcf.gz EUR_chr10
 
-file=$1
+file=`realpath $1`
 base_name=$2
 
 

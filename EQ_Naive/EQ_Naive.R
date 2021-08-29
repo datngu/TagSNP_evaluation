@@ -56,7 +56,7 @@ site = read.table(all_site, header = F)
 info_slipt = unlist(strsplit(site$V3[1],";", fixed = T))
 pick_pos = grep("AF=", info_slipt, fixed = T)[1]
 
-
+site$V1 = gsub("chr", "", site$V1, fixed = T)
 site$V3 = sapply(site$V3, function(x) unlist(strsplit(x,";"))[pick_pos])
 site$V3 = sapply(site$V3, function(x) unlist(strsplit(x,"="))[2])
 #site$ID = paste(site$X.CHROM, site$POS, site$REF, site$ALT, sep = ":")
@@ -84,7 +84,7 @@ for(i in 1:array_size){
   }
   tem = site[pick,]
   #od = order(tem$MAF, decreasing = T)
-  tem = tem[od,]
+  #tem = tem[od,]
 
   if(n_pick <= nrow(tem)){
     res = tem[c(1:n_pick),]

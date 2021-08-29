@@ -4,7 +4,7 @@ Evaluation tag SNP selection strategies
 These scipts tested in Ubuntu v18 environment.
 
 
-# Clone this project:
+# Clone this project and config pipeline:
 
 ```sh
 
@@ -18,12 +18,10 @@ Assumming that you have a processed (Bialellic SNPs with MAF >= 1%) vcf.gz file 
 ## 1. Running TagIt
 
 ```sh
+cd TagSNP_evaluation/TagIt
+bash configure.sh
 
-cd TagSNP_evaluation/TagIt 
-
-bash bash configure.sh
-
-TagSNP_evaluation/TagIt/TagIt_pipeline.sh chr10_EAS.vcf.gz chr10_EAS
+bash TagIt_pipeline.sh ../chr10_EAS.vcf.gz chr10_EAS
 
 # picking top 30000 tag SNP selected from 
 head -n 30000 chr10_EAS/chr10_EAS_tags_cleaned.txt > chr10_EAS_tags_30000_cleaned.txt
@@ -39,7 +37,7 @@ cd TagSNP_evaluation/FastTagger
 
 bash bash configure.sh
 
-TagSNP_evaluation/TagIt/FastTagger.sh chr10_EAS.vcf.gz 30000 chr10_EAS
+bash FastTagger_pipeline.sh  ../chr10_EAS.vcf.gz chr10_EAS 30000 chr10_EAS
 
 ```
 
@@ -51,7 +49,7 @@ You output should be: `TagSNP_evaluation/FastTagger/cleaned_EAS_chr10_EAS_30000.
 
 cd TagSNP_evaluation/EQ_Naive
 
-EQ_Naive.R vcf=chr10_EAS.vcf.gz size=30000 out=EQ_Naive_array_30000.txt
+Rscript EQ_Naive.R vcf=../chr10_EAS.vcf.gz size=30000 out=EQ_Naive_array_30000.txt
 
 ```
 
@@ -63,7 +61,7 @@ You output should be: `TagSNP_evaluation/EQ_Naive/EQ_Naive_array_30000.txt`
 
 cd TagSNP_evaluation/EQ_MAF
 
-EQ_MAF.R vcf=chr10_EAS.vcf.gz size=30000 out=EQ_MAF_array_30000.txt
+Rscript EQ_MAF.R vcf=../chr10_EAS.vcf.gz size=30000 out=EQ_MAF_array_30000.txt
 
 ```
 
