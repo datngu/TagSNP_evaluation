@@ -1,0 +1,154 @@
+Usage:
+
+   FastTagger para.txt 
+
+File para.txt contains the list of parameters. Each line is of the form xxx=yyy, where xxx is the 
+name of the parameter, and yyy is the value of the parameter. The parameters are described as
+follows: 
+
+1. data_maf: Each line contains information of a single SNP, and its format
+                 is as follows:
+     
+                 id	position	allele1	allele2	MAF
+     
+                where allele1 and allele2 are the two alleles of the SNP, allele1 corresponds to 0
+                and allele2 corresponds to 1 in file ".matrix", MAF is the minor allele frequency
+                of the SNP. Allele1 must be the major allele of the SNP. 
+                
+2. data_matrix: Each line contains the alleles of a SNP over all individuals. Each allele is
+                 either 0 or 1, and the corresponding actual allele can be find in file ".maf". The 
+                 total number of 0s and 1s in each line is equal to the number of individuals times 2 since 
+                 chromosomes come in pairs. There is
+                 a one-to-one correspondance between the SNPs in file ".maf" and ".matrix". SNPs at the
+                 same line in the two files refer to the same SNP. 
+
+
+3. min_maf: the minimum frequency of the minor allele. default value: 0.05. 
+
+4. window_len: the maximum distance between correlated SNPs. Default value: 100000
+
+5. min_r2_1: the minimum correlation threshold for length-1 rule. Default value: 0.8. 
+6. min_r2_2: the minimum correlation threshold for length-2 rule. Default value: 0.9. 
+7. min_r2_3: the minimum correlation threshold for length-3 rule. Default value: 0.95. 
+
+
+8. max_len: the maximum length of the SNP set on the left hand side of the rules. Default value: 3
+
+9. max_merge_window_len: this threshold is used to merge equivalent SNPs. Only equivalent SNPs within the
+                     specified distance are merged together. Default value: 100000. 
+
+10. min_bin_size: the minimum frequency of combinations of alleles on the left hand side that can be mapped 
+                 to the right hand side. For example, for length-3 rules, if the frequency of 000, 001, 010, 011,
+                 100, 101, 110 or 111 is less than min_bin_size, then these small bins are combined together and
+                 then map to one of the two alleles of the right hand side SNP. Default value: 0. 
+
+
+11. max_covered_times: the maximum times of a SNP being tagged by other SNPs. The purpose of this parameter is 
+                      to speed up the running time in the cost of missing some rules. The basic idea is that 
+                      if a SNP has been covered by enough number of times by other SNPs, then this SNP will not 
+                      be considered as right hand side in the future. Hopefully this will not increase the number
+                      of tag SNPs selected considerably. 
+                      If the value of this parameter is 0, then no restriction on the number of times that a SNP
+                      is being covered, i.e. all the rules are generated.
+                      Suggested value: 0 
+
+12. mem_size: the maximum size of the memory can be used by the program. If its value is 0, then no 
+             restriction on memory size. Suggested value: 0
+
+13. max_tagSNP_num: the desired number of tag SNPs. If it is set to 0, then the tag SNP selection algorithm
+                   stops when all the SNPs are covered, otherwise, the algorithm stops when the desired 
+                   number of tag SNPs is reached. Default value: 0. 
+
+14. model: the model used in the algorithm. It takes two values: MMTagger and MultiTag. "MMTagger" refers to the 
+           co-occurrence model used by the MMTagger algorithm. "MultiTag" refers to the one-vs-the-rest model 
+           used by the MultiTag algorithm. Default value "MMTagger". 
+
+15. output: the name of the output files. Six files are generated:
+
+                 a)".SNPlineno.txt": contains the line no of the SNPs in file ".maf" and ".matrix"
+                                     that satisfies the min_maf threshold.
+
+                 b)".SNPid.txt": contains the information of the SNPs that satisfies the min_maf 
+                                 threshold. Its format is as follows:
+
+                                   id	position	allele1	allele2
+
+                                 where allele1 and allele2 are the two alleles of the SNP, 
+                                 allele1 corresponds to 0 and allele2 corresponds to 1
+
+                c)".merged-ids.txt": Each line contains a set of SNPs being merged together. The first 
+                                     number is the number of SNPs being merged together, followed by 
+                                     the order of the SNPs being merged together. Here, the order of 
+                                     a SNP is its line number in file ".SNPid.txt" minus 1. 
+                                     Note that if the alleles of
+                                     of a SNP is identical to that of the SNP it is merged with, then its id 
+                                     is positive. Otherwise, if the alleles of a SNP is the reverse of the alleles
+                                     of the SNP it is merged with, then its id is negative. 
+
+                d)".rule.bin": is a binary file, contains the rules generated. Every SNP is represented by its
+                               line no minus 1 in file ".SNPid.txt". 
+
+                               length-1 rule format: 
+                               
+                               1 SNP1 SNP2 r2 flag
+
+                               This actually represent two rules: SNP1=>SNP2 and SNP2=>SNP1. If flag=1, 
+                               then 1<=>1, 0<=>0; if flag=0, then 1<=>0, 0<=>1. r2 is a real number 
+                               between 0 and 1, and it is the correlation value between SNP1 and SNP2. 
+
+                               If LHS contains more than one SNP, the format is as follows:
+            
+                               k   SNP_i1 ... SNP_ik 
+                               t   SNP_j1   R2_j1    flag_j1
+                                   SNP_j2   R2_j2    flag_j2
+                                    ... 
+                                   SNP_jt   R2_jt    flat_jt
+
+                               Where k is the length of left hand side, t is the number of SNPs that 
+                               can be inferred from left hand side. 
+                               The values of flag_j1, ... flag_jt are set as follows. There are 2^k possible
+                               combinations of alleles of SNP_i1, .... SNP_ik on the left hand side, and each
+                               combination can be mapped to an integer. When we calculate r^2, we map each 
+                               combintaion to the two alleles of SNP_j1 (0 or 1). Let n=a1a2..ak, where 
+                               a1, a2, ... a_k are alleles of SNP_i1, SNP_i2, ..., SNP_ik. If n is 
+                               mapped to 1 of SNP_j1, then the n-th bit of flag_j1 is set to 1.
+                               For example, suppose there are 3 SNPs on the left hand side, so ther are 8
+                               combinations. The mappings between these 8 combinations and the two alleles of 
+                               SNP_j1 are as follows:
+                    
+                                         000 -> 0
+                                         001 -> 0
+                                         010 -> 1
+                                         011 -> 0
+                                         100 -> 0
+                                         101 -> 1
+                                         110 -> 0
+                                         111 -> 1
+                              
+                                Then the value of falg_j1 is 10100100 = 164
+                                Note that in this file, each SNP may actually represent multiple SNPs that
+                                are merged with it. As a result, each rule may represent multiple rules, 
+                                but not every rule is valid. You need to use the distance constraint to 
+                                filter invalid rules. 
+                                 
+
+                  e)".tagSNP.txt": Each line contains a tag SNP. Here every tag SNP is represented by
+                                   its line no in file ".SNPid.txt" minus 1. 
+
+                  f)".tagrule.txt": contains the tagging rules. Every SNP on the left hand side of a tagging
+                                    rule must appear in file ".tagSNP.txt". The format of each rule is as
+                                    follows:
+
+                                      k   SNP_i1 ... SNP_ik 
+                                      t   SNP_j1   R2_j1    flag_j1	...	SNP_jt   R2_jt    flat_jt
+
+                                    Note that a SNP on the left hand side of the rule represent only itself,
+                                    while a SNP on the right hand side may represent a set of SNPs that are
+                                    merged with it. 
+
+
+       
+Note: if a parameter is not specified in file "para.txt", then its default value is used. 
+       
+
+

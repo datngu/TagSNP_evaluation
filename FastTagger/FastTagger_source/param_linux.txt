@@ -1,0 +1,15 @@
+data_maf=ENm010_CEU.maf
+data_matrix=ENm010_CEU.matrix
+min_maf=0.05
+window_len=100000
+min_r2_1=0.90
+min_r2_2=0.90
+min_r2_3=0.90
+max_len=3
+max_merge_window_len=100000
+min_bin_size=0
+max_covered_times=0
+mem_size=0
+max_tagSNP_num=0.00
+model=MMTagger
+output=temp

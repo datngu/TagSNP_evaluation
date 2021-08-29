@@ -1,0 +1,15 @@
+data_maf=NULL
+data_matrix=NULL
+min_maf=0.01
+window_len=100000
+min_r2_1=0.80
+min_r2_2=0.90
+min_r2_3=0.95
+max_len=3
+max_merge_window_len=100000
+min_bin_size=0
+max_covered_times=10
+mem_size=0
+max_tagSNP_num=30000
+model=MMTagger
+output=temp
