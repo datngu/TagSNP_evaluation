@@ -4,7 +4,16 @@ Evaluation tag SNP selection strategies
 These scipts tested in Ubuntu v18 environment.
 
 
-# Clone this project and config pipeline:
+## Software requirements
+Leave one out imputation cross validation requires R, vcftools, bcftools, minimac3, minimac4, and plink.
+- VCFtools 0.1.17 : https://vcftools.github.io
+- bcftools 1.10.2 : https://github.com/samtools/bcftools
+- plink1.9 : https://www.cog-genomics.org/plink/
+- minimac3 : https://genome.sph.umich.edu/wiki/Minimac3
+- minimac4 : https://genome.sph.umich.edu/wiki/Minimac4
+- R packages version 3.6.0 or latter
+
+## Clone this project and config pipeline:
 
 ```sh
 
@@ -43,17 +52,17 @@ bash FastTagger_pipeline.sh  ../chr10_EAS.vcf.gz chr10_EAS 30000 chr10_EAS
 
 You output should be: `TagSNP_evaluation/FastTagger/cleaned_EAS_chr10_EAS_30000.tagSNP.txt`
 
-## 3. Running EQ_Naive
+## 3. Running EQ_uniform
 
 ```sh
 
-cd TagSNP_evaluation/EQ_Naive
+cd TagSNP_evaluation/EQ_uniform
 
-Rscript EQ_Naive.R vcf=../chr10_EAS.vcf.gz size=30000 out=EQ_Naive_array_30000.txt
+Rscript EQ_uniform.R vcf=../chr10_EAS.vcf.gz size=30000 out=EQ_uniform_array_30000.txt
 
 ```
 
-You output should be: `TagSNP_evaluation/EQ_Naive/EQ_Naive_array_30000.txt`
+You output should be: `TagSNP_evaluation/EQ_uniform/EQ_uniform_array_30000.txt`
 
 ## 4. Running EQ_MAF
 
@@ -95,11 +104,11 @@ imputation_with_prebuilt_ref.sh -t FastTagger/cleaned_EAS_chr10_EAS_30000.tagSNP
 compute_imputation_accuracy.R imputation=FastTagger_EAS out=FastTagger_EAS.Rdata
 
 
-# 3. EQ_Naive
+# 3. EQ_uniform
 ## imputation
-imputation_with_prebuilt_ref.sh -t EQ_Naive/EQ_Naive_array_30000.txt -r chr10_EAS_imputation_ref -o EQ_Naive_EAS -p 16
+imputation_with_prebuilt_ref.sh -t EQ_uniform/EQ_uniform_array_30000.txt -r chr10_EAS_imputation_ref -o EQ_uniform_EAS -p 16
 ## computing Pearson's correlation
-compute_imputation_accuracy.R imputation=EQ_Naive_EAS out=EQ_Naive_EAS.Rdata
+compute_imputation_accuracy.R imputation=EQ_uniform_EAS out=EQ_uniform_EAS.Rdata
 
 # 4. EQ_MAF
 ## imputation
@@ -109,7 +118,7 @@ compute_imputation_accuracy.R imputation=EQ_MAF_EAS out=EQ_MAF_EAS.Rdata
 
 ```
 
-You output should be: `TagIt_EAS.Rdata, FastTagger_EAS.Rdata, EQ_Naive_EAS.Rdata, EQ_MAF_EAS.Rdata`
+You output should be: `TagIt_EAS.Rdata, FastTagger_EAS.Rdata, EQ_uniform_EAS.Rdata, EQ_MAF_EAS.Rdata`
 
 
 
