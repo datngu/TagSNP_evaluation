@@ -120,9 +120,9 @@ compute_imputation_accuracy.R imputation=EQ_MAF_EAS out=EQ_MAF_EAS.Rdata
 
 You output should be: `TagIt_EAS.Rdata, FastTagger_EAS.Rdata, EQ_uniform_EAS.Rdata, EQ_MAF_EAS.Rdata`
 
+# III. REFERENCE
 
-
-
+D. T. Nguyen, H. Q. Dinh, G. M. Vu, D. T. Nguyen and N. S. Vo, "A comprehensive imputation-based evaluation of tag SNP selection strategies," 2021 13th International Conference on Knowledge and Systems Engineering (KSE), 2021, pp. 1-6, doi: 10.1109/KSE53942.2021.9648614.
 
 
 
