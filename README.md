@@ -122,7 +122,8 @@ You output should be: `TagIt_EAS.Rdata, FastTagger_EAS.Rdata, EQ_uniform_EAS.Rda
 
 # III. REFERENCE
 
-Nguyen, D. T., Dinh, H. Q., Vu, G. M., Nguyen, D. T., & Vo, N. S. (2021, November). A comprehensive imputation-based evaluation of tag SNP selection strategies. In 2021 13th International Conference on Knowledge and Systems Engineering (KSE) (pp. 1-6). IEEE.
+Nguyen, D. T., Dinh, H. Q., Vu, G. M., Nguyen, D. T., & Vo, N. S. (2021, November). A comprehensive imputation-based evaluation of tag SNP selection strategies. In 2021 13th International Conference on Knowledge and Systems Engineering (KSE) (pp. 1-6). IEEE. https://doi.org/10.1109/KSE53942.2021.9648614
+
 
 
 
